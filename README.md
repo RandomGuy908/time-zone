@@ -6,9 +6,16 @@ A small, fast, self-hosted time zone conversion utility designed for quick every
 
 Time Zone Converter accepts natural date and time input, understands both 12-hour and 24-hour formats, handles daylight-saving transitions, provides searchable IANA time zones with country flags, compares multiple zones at once, remembers useful preferences locally, and can be installed as a Progressive Web App (PWA).
 
-The default destination is **Mountain Time — Denver (`America/Denver`)**, so Denver automatically changes between MST and MDT when daylight-saving rules require it.
+On first use, the default source and destination are automatically detected from the browser/device system time zone. Users can override the default destination in Settings, and that preference is stored locally in the browser.
 
 ---
+
+## v1.0.1 — System Time Zone Default
+
+- The first-run source and destination now default to the browser/device system time zone instead of Denver.
+- A saved user preference still overrides automatic detection.
+- If the browser cannot provide a supported IANA zone, the app safely falls back to UTC.
+- Removed the hard-coded `TZ=America/Denver` Docker environment setting.
 
 ## Features
 
@@ -295,7 +302,6 @@ services:
     ports:
       - "6030:3000"
     environment:
-      TZ: America/Denver
       PORT: 3000
 ```
 
@@ -316,9 +322,9 @@ docker compose up -d
 
 ### About the `TZ` environment variable
 
-The container is configured with `TZ=America/Denver`, but browser-side conversions are not implemented by changing the server's system clock. The conversion engine explicitly uses IANA time-zone identifiers with JavaScript's `Intl` APIs.
+The application does not require a hard-coded server time zone. On first use it detects the browser/device's IANA time zone with `Intl.DateTimeFormat().resolvedOptions().timeZone`. Browser-side conversions explicitly use IANA time-zone identifiers with JavaScript's `Intl` APIs.
 
-The application's default destination is also Denver unless the user changes their browser preference.
+The detected system zone is used as the initial source and destination unless the user has saved another default destination in Settings.
 
 ---
 
@@ -559,7 +565,7 @@ Compose provides the normal self-hosted deployment configuration, including:
 - Stable container name
 - Automatic restart unless manually stopped
 - Port 6030 → 3000 mapping
-- Denver server timezone environment setting
+- Automatic browser/device system time-zone detection
 
 ---
 
@@ -585,10 +591,10 @@ A current version of Chrome, Edge, Firefox, or another modern browser is recomme
 The v1.0.0 defaults are intentionally useful for a Mountain Time deployment:
 
 ```text
-Default destination: America/Denver
+Default destination: Browser/device system time zone (user-overridable)
 Docker host port:    6030
 Container port:      3000
-Container TZ:        America/Denver
+Container TZ:        No fixed application default
 History:             Browser-local
 Database:            None
 External APIs:       None
