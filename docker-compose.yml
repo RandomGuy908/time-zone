@@ -1,0 +1,10 @@
+services:
+  timezone-converter:
+    build: .
+    container_name: timezone-converter
+    restart: unless-stopped
+    ports:
+      - "6030:3000"
+    environment:
+      TZ: America/Denver
+      PORT: 3000
