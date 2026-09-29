@@ -1,29 +1,22 @@
-# Time Zone Converter 0.1.0
+# Time Zone Converter v0.2.0
 
-Small self-hosted time zone converter. Destination defaults to `America/Denver` and browser timezone APIs automatically account for DST.
-
-## Run with Docker Compose
-
-```bash
-docker compose up -d --build
-```
-
-Open `http://SERVER-IP:6030`.
-
-## Update / rebuild
-
-```bash
-docker compose down
-docker compose up -d --build
-```
+Small self-hosted, Dockerized time zone converter. No database or external API required.
 
 ## Features
-- Date and time input
-- Source timezone selector
-- Destination timezone selector defaulting to Denver/Mountain
-- DST-aware conversions using IANA time zones
-- Use current time
-- Swap zones
-- Copy result
-- Mobile-friendly dark UI
-- No database or external API required
+- Natural 12-hour and 24-hour time input (`9am`, `9:15 PM`, `21:15`)
+- Searchable IANA time zones with common abbreviations such as MST/MDT/CET/CEST
+- Country/region flags for common zones
+- America/Denver default destination
+- Automatic DST handling and nearby DST warnings
+- Day-boundary labels (Yesterday / Same day / Tomorrow)
+- Relative time difference
+- Browser-saved favorites and comparison zones
+- Multi-zone comparison panel
+- Copy conversion and shareable URL
+- Responsive dark interface
+
+## Run
+```bash
+docker compose up -d --build
+```
+Open `http://SERVER-IP:6030`.
