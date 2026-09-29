@@ -1,19 +1,22 @@
-# Time Zone Converter v0.2.0
+# Time Zone Converter v0.3.0
 
-Small self-hosted, Dockerized time zone converter. No database or external API required.
+Small self-hosted timezone converter with no database or external API.
 
-## Features
-- Natural 12-hour and 24-hour time input (`9am`, `9:15 PM`, `21:15`)
-- Searchable IANA time zones with common abbreviations such as MST/MDT/CET/CEST
-- Country/region flags for common zones
-- America/Denver default destination
-- Automatic DST handling and nearby DST warnings
-- Day-boundary labels (Yesterday / Same day / Tomorrow)
-- Relative time difference
-- Browser-saved favorites and comparison zones
-- Multi-zone comparison panel
-- Copy conversion and shareable URL
-- Responsive dark interface
+## v0.3 highlights
+- Searchable autocomplete timezone pickers with favorites and recent zones
+- Country flags and friendly timezone metadata
+- Natural time input (`7pm`, `19:30`, `1930`, `noon`, `midnight`, `now`)
+- Natural date input (`today`, `tomorrow`, weekday names, `Oct 4`, `10/4/26`)
+- Exact DST gap/overlap detection with choice when a local time occurs twice
+- Timezone information panel
+- Keyboard shortcuts: `/` search, Enter convert, S swap, N now, C copy, Esc close
+- Drag/reorder comparison zones
+- ±30m / ±1h timeline controls
+- Conversion history stored locally
+- Shareable URL conversions
+- Installable/offline PWA
+- Light, dark, and system themes
+- Accessibility and mobile polish
 
 ## Run
 ```bash
