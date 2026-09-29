@@ -1,0 +1,48 @@
+name: Build GitHub Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify tag matches package version
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          test "v$VERSION" = "${GITHUB_REF_NAME}" || {
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json version v$VERSION"
+            exit 1
+          }
+
+      - name: Build release package
+        shell: bash
+        run: |
+          rm -rf release-stage dist
+          mkdir -p release-stage dist
+          cp -a Dockerfile docker-compose.yml package.json README.md src scripts release-stage/
+          (cd release-stage && zip -qr ../dist/time-zone-app.zip .)
+          cp install.sh install.ps1 dist/
+          (cd dist && sha256sum time-zone-app.zip install.sh install.ps1 > checksums.txt)
+
+      - name: Create release and upload assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            dist/time-zone-app.zip \
+            dist/install.sh \
+            dist/install.ps1 \
+            dist/checksums.txt \
+            --title "Time Zone Converter ${GITHUB_REF_NAME}" \
+            --generate-notes

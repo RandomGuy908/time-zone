@@ -692,3 +692,75 @@ v1.0.0 marks the first stable release of Time Zone Converter. It includes the fu
 ## License
 
 No license file is included in this release. If the repository is intended for public reuse or contribution, add an explicit open-source license before describing the project as open source.
+
+---
+
+## One-command installation from GitHub Releases
+
+GitHub Releases are the recommended installation path for normal users. Every tagged release publishes a stable `time-zone-app.zip`, Linux installer, Windows installer, and SHA-256 checksum file.
+
+### Debian / Ubuntu
+
+```bash
+curl -fsSL https://github.com/RandomGuy908/time-zone/releases/latest/download/install.sh | sudo bash
+```
+
+The installer installs Docker Engine when needed, downloads the latest application archive, verifies its SHA-256 checksum, installs to `/opt/time-zone`, builds the container, and starts the site on port `6030`.
+
+Update later with:
+
+```bash
+sudo /opt/time-zone/scripts/update.sh
+```
+
+Uninstall with:
+
+```bash
+sudo /opt/time-zone/scripts/uninstall.sh
+```
+
+### Windows
+
+Windows uses Docker Desktop. Install and start Docker Desktop first, then open PowerShell and run:
+
+```powershell
+irm https://github.com/RandomGuy908/time-zone/releases/latest/download/install.ps1 | iex
+```
+
+The application is installed by default under `%LOCALAPPDATA%\TimeZoneConverter` and becomes available at `http://localhost:6030`.
+
+Update later with:
+
+```powershell
+& "$env:LOCALAPPDATA\TimeZoneConverter\scripts\update.ps1"
+```
+
+Uninstall with:
+
+```powershell
+& "$env:LOCALAPPDATA\TimeZoneConverter\scripts\uninstall.ps1"
+```
+
+The uninstall scripts remove the Time Zone Converter application and container but intentionally leave Docker/Docker Desktop installed.
+
+## Automated release workflow
+
+The repository contains `.github/workflows/release.yml`. Pushing a semantic version tag such as `v1.0.0` automatically:
+
+1. Checks that the tag matches the version in `package.json`.
+2. Packages the deployable application as `time-zone-app.zip`.
+3. Generates SHA-256 checksums.
+4. Creates the GitHub Release with generated release notes.
+5. Uploads `time-zone-app.zip`, `install.sh`, `install.ps1`, and `checksums.txt` as release assets.
+
+Example release:
+
+```bash
+git add .
+git commit -m "Release v1.0.0"
+git push origin main
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+For a future `v1.1.0`, update `package.json` and the displayed application version first, commit and push those changes, then create and push the `v1.1.0` tag.
